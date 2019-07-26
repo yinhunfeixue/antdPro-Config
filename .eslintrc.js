@@ -10,6 +10,7 @@ module.exports = {
     '@typescript-eslint/no-empty-interface': 'off',
     'import/no-unresolved': 0,
     'object-curly-newline': 0,
+    'generator-star-spacing': 0,
   },
   globals: {
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION: true,

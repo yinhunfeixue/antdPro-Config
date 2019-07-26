@@ -1,6 +1,6 @@
-// import { AnyAction } from 'redux';
-// import { EffectsCommandMap } from 'dva';
-// import { message } from 'antd';
+import { AnyAction } from 'redux';
+import { EffectsCommandMap } from 'dva';
+import { message } from 'antd';
 
 class SystemUtil {
   /**
@@ -9,20 +9,25 @@ class SystemUtil {
    * @param funs
    * @param apiFunction
    */
-  // static *NormalCallRequest(data: AnyAction, funs: EffectsCommandMap, apiFunction: Function) {
-  //   const res = yield funs.call(apiFunction, data.payLoad);
-  //   if (data.callBack && res) {
-  //     data.callBack(res);
-  //   }
-  //   if (res.code === '10001' || res instanceof Blob) {
-  //     if (data.callBack) {
-  //       data.callBack(res);
-  //     } else {
-  //       message.error(res.msg);
-  //     }
-  //     return res;
-  //   }
-  // }
+  public static *NormalCallRequest(
+    data: AnyAction,
+    funs: EffectsCommandMap,
+    apiFunction: Function,
+  ): any {
+    const res = yield funs.call(apiFunction, data.payLoad);
+    if (data.callBack && res) {
+      data.callBack(res);
+    }
+    if (res.code === '10001' || res instanceof Blob) {
+      if (data.callBack) {
+        data.callBack(res);
+      } else {
+        message.error(res.msg);
+      }
+      return res;
+    }
+    return null;
+  }
 
   /**
    * 导出blob为文件，并自动下载
