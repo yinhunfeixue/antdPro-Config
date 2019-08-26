@@ -4,7 +4,7 @@ import { message } from 'antd';
 
 class SystemUtil {
   /**
-   *
+   * 通用的请求方法
    * @param data
    * @param funs
    * @param apiFunction

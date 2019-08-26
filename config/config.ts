@@ -83,7 +83,6 @@ export default {
   block: {
     defaultGitUrl: 'https://github.com/ant-design/pro-blocks',
   },
-  hash: true,
   targets: {
     ie: 11,
   },
@@ -138,6 +137,7 @@ export default {
     basePath: '/',
   },
   chainWebpack: webpackPlugin,
+  history: 'hash',
   /*
   proxy: {
     '/server/api/': {
