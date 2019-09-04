@@ -1,10 +1,10 @@
-import React, { Component, ReactNode } from 'react';
-import IPageProps from '@/base/interfaces/IPageProps';
-import { Button, Card, Input, Form } from 'antd';
-import DetailModal, { IDetailModalProps } from '@/components/Project/DetailModal';
-import AntdUtil from '@/base/utils/AntdUtil';
 import { DetailViewClass } from '@/base/components/DetailView';
 import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
+import IPageProps from '@/base/interfaces/IPageProps';
+import AntdUtil from '@/base/utils/AntdUtil';
+import DetailModal, { IDetailModalProps } from '@/components/Project/DetailModal';
+import { Button, Card, Form, Input } from 'antd';
+import React, { Component, ReactNode } from 'react';
 
 interface IDetailModelPageSate {
   initData: any;
