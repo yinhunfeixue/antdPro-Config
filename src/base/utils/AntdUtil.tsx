@@ -1,8 +1,8 @@
-import React, { ReactElement, ReactNode } from 'react';
-import { Select, Tree, Col } from 'antd';
-import FormItem from 'antd/lib/form/FormItem';
 import IFormItemData from '@/base/interfaces/IFormItemData';
-import { TreeProps, AntTreeNodeProps } from 'antd/lib/tree';
+import { Col, Select, Tree } from 'antd';
+import FormItem from 'antd/lib/form/FormItem';
+import { AntTreeNodeProps, TreeProps } from 'antd/lib/tree';
+import React, { ReactElement, ReactNode } from 'react';
 
 const { TreeNode } = Tree;
 
@@ -75,6 +75,12 @@ class AntdUtil {
     );
   }
 
+  /**
+   * 渲染表单项
+   * @param dataSource 表单数据源
+   * @param defaultSpan 默认span值 ，每项占用的列数（列的含义请参考antd, https://ant.design/components/grid-cn/)
+   * @param defaultFormLabelSpan 默认每个表单项的标签中用的列数
+   */
   public static renderFormItems(
     dataSource: IFormItemData[],
     defaultSpan?: number,

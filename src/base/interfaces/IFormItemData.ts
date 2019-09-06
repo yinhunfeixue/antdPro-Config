@@ -1,3 +1,4 @@
+import { FormItemProps } from 'antd/lib/form/FormItem';
 import { ReactNode } from 'react';
 
 export default interface IFormItemData {
@@ -15,7 +16,13 @@ export default interface IFormItemData {
    */
   span?: number;
 
+  /**
+   * 当前项标签占用的span
+   */
   formLabelSpan?: number;
 
-  formItemProps?: any;
+  /**
+   * 要给FormItem元素传的props
+   */
+  formItemProps?: FormItemProps;
 }
