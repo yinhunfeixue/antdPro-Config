@@ -1,8 +1,8 @@
-import React, { Component, ReactNode } from 'react';
-import Axios from 'axios';
-import { Spin, Form } from 'antd';
-import IForm from '@/base/interfaces/IForm';
 import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
+import IForm from '@/base/interfaces/IForm';
+import { Form, Spin } from 'antd';
+import Axios from 'axios';
+import React, { Component, ReactNode } from 'react';
 
 class DetailView extends Component<IDetailViewProps & IForm, IDetailViewState> {
   public constructor(props: IDetailViewProps & IForm) {
@@ -21,6 +21,10 @@ class DetailView extends Component<IDetailViewProps & IForm, IDetailViewState> {
     ) {
       this.getData();
     }
+  }
+
+  private aaa(a: string = '11') {
+    console.log(a);
   }
 
   private getData() {

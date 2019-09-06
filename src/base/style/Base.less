@@ -1,0 +1,22 @@
+// 基础样式函数
+.BaseStyle(@background, @border, @color, @fontSize:unset) {
+  background: @background;
+  border: @border;
+  color: @color;
+  font-size: @fontSize;
+}
+
+* {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+
+:global {
+  .HBox(@align:flex-start, @childSpace:10px) {
+    display: inline-flex;
+    justify-content: @align;
+    > *:not(:last-child) {
+      margin-right: @childSpace;
+    }
+  }
+}

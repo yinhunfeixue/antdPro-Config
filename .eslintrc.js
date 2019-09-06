@@ -3,6 +3,7 @@ const { strictEslint } = require('@umijs/fabric');
 module.exports = {
   ...strictEslint,
   rules: {
+    '@typescript-eslint/no-inferrable-types': 'off',
     'react/no-array-index-key': 'off',
     'prefer-const': 'off',
     '@typescript-eslint/no-explicit-any': 'off',

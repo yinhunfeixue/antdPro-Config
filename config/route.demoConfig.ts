@@ -40,6 +40,11 @@ export default [
           },
         ],
       },
+      {
+        name: 'Style',
+        path: 'Style',
+        component: './Demo/StyleDemo',
+      },
     ],
   },
 ];

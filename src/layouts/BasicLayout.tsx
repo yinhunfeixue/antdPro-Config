@@ -4,20 +4,20 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 
-import ProLayout, {
-  MenuDataItem,
-  BasicLayoutProps as ProLayoutProps,
-  Settings,
-} from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
-import Link from 'umi/link';
-import { connect } from 'dva';
-import { formatMessage } from 'umi-plugin-react/locale';
-
-import Authorized from '@/utils/Authorized';
+import '@/base/style/Theme.less';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState, Dispatch } from '@/models/connect';
+import Authorized from '@/utils/Authorized';
 import { isAntDesignPro } from '@/utils/utils';
+import ProLayout, {
+  BasicLayoutProps as ProLayoutProps,
+  MenuDataItem,
+  Settings,
+} from '@ant-design/pro-layout';
+import { connect } from 'dva';
+import React, { useEffect } from 'react';
+import { formatMessage } from 'umi-plugin-react/locale';
+import Link from 'umi/link';
 import logo from '../assets/logo.svg';
 
 export interface BasicLayoutProps extends ProLayoutProps {
