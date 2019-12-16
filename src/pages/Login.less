@@ -1,57 +1,57 @@
 .Login {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 
   &,
   .Bg {
     position: fixed;
     top: 0;
+    right: 0;
     bottom: 0;
     left: 0;
-    right: 0;
-    background-size: cover;
     background-position: center;
+    background-size: cover;
   }
 
   .Bg {
     background-image: url('@/assets/login/bg.png');
   }
   main::before {
-    content: '';
-    display: block;
-    filter: blur(3px);
     position: absolute;
     top: 50%;
     left: 50%;
+    display: block;
     width: 100vw;
     height: 100vh;
     background-image: url('@/assets/login/bg.png');
-    background-size: cover;
     background-position: center;
+    background-size: cover;
     transform: translate(-50%, -50%);
+    filter: blur(3px);
+    content: '';
   }
 
   main {
-    padding: 50px;
-    box-shadow: 0 0px 10px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
+    position: fixed;
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 30%;
     min-width: 400px;
     max-width: 600px;
-    position: fixed;
+    padding: 50px;
     overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 
     > *:not(:last-child) {
       margin-bottom: 20px;
     }
     .Logo {
-      margin-bottom: 50px;
       z-index: 1;
+      margin-bottom: 50px;
     }
   }
 }

@@ -77,8 +77,8 @@ body {
   }
 
   .ant-btn {
-    transition: all 0.3s;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
+    transition: all 0.3s;
 
     &:hover {
       .BaseStyle(@BtnHoverBackground, none, @BtnHoverColor);
@@ -99,7 +99,7 @@ body {
       .BaseStyle(@BtnDisableBackground, none, @BtnDisableColor);
     }
 
-    &:after {
+    &::after {
       content: none;
     }
   }
