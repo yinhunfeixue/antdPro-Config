@@ -39,6 +39,8 @@ module.exports = {
     '@typescript-eslint/no-namespace': 'off',
     'no-redeclare': 'off',
     'no-inner-declarations': 'off',
+    'jsx-a11y/alt-text': 'off',
+    'global-require': 'off',
   },
   globals: {
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION: true,

@@ -7,9 +7,12 @@ const demoRoutes = env === 'development' ? DemoRoute : [];
 
 const routes = [
   {
+    path: '/Login',
+    component: './Login.tsx',
+  },
+  {
     path: '/',
     component: '../layouts/BasicLayout',
-    Routes: ['src/pages/Authorized'],
     routes: [
       {
         path: '/welcome',

@@ -100,6 +100,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   return (
     <ProLayout
       logo={logo}
+      disableMobile
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
         if (menuItemProps.isUrl) {
