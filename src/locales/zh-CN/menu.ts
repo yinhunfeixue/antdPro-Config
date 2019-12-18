@@ -48,5 +48,13 @@ export default {
   'menu.editor.mind': '脑图编辑器',
   'menu.editor.koni': '拓扑编辑器',
 
-  'menu.DemoSearchTable': 'searchTable示例',
+  'menu.Demo': '示例',
+  'menu.Demo.Components': '组件示例',
+  'menu.Demo.Components.DemoSearchTable': ' 搜索列表',
+  'menu.Demo.Components.DetailModelPage': '详情弹窗',
+  'menu.Demo.Functions': '函数示例',
+  'menu.Demo.Functions.RenderForm': '渲染表单',
+  'menu.Demo.Functions.RenderSelectOption': '渲染下拉列表',
+  'menu.Demo.Functions.RenderTree': '渲染树',
+  'menu.Demo.Style': '样式示例',
 };

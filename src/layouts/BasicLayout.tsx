@@ -8,17 +8,17 @@ import '@/base/style/Theme.less';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState, Dispatch } from '@/models/connect';
 import Authorized from '@/utils/Authorized';
-import { isAntDesignPro } from '@/utils/utils';
 import ProLayout, {
   BasicLayoutProps as ProLayoutProps,
   MenuDataItem,
   Settings,
 } from '@ant-design/pro-layout';
 import { connect } from 'dva';
-import React, { useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { formatMessage } from 'umi-plugin-react/locale';
 import Link from 'umi/link';
-import logo from '../assets/logo.svg';
+import defaultSettings from '../../config/defaultSettings';
+import logo from '../assets/logo.png';
 
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
@@ -26,6 +26,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   };
   settings: Settings;
   dispatch: Dispatch;
+  children: ReactNode;
 }
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
@@ -45,32 +46,20 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
-const footerRender: BasicLayoutProps['footerRender'] = (_, defaultDom) => {
-  if (!isAntDesignPro()) {
-    return defaultDom;
-  }
+const footerRender: BasicLayoutProps['footerRender'] = () => {
   return (
-    <>
-      {defaultDom}
-      <div
-        style={{
-          padding: '0px 24px 24px',
-          textAlign: 'center',
-        }}
-      >
-        <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">
-          <img
-            src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
-            width="82px"
-            alt="netlify logo"
-          />
-        </a>
-      </div>
-    </>
+    <footer
+      style={{
+        padding: '0px 24px 24px',
+        textAlign: 'center',
+      }}
+    >
+      copyright ©{new Date().getFullYear()} {defaultSettings.title}
+    </footer>
   );
 };
 
-const BasicLayout: React.FC<BasicLayoutProps> = props => {
+const BasicLayout: React.FC<BasicLayoutProps> = (props: BasicLayoutProps) => {
   const { dispatch, children, settings } = props;
   /**
    * constructor
@@ -132,6 +121,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}
       {...settings}
+      title=""
     >
       {children}
     </ProLayout>

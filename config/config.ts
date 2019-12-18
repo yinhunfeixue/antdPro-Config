@@ -1,8 +1,7 @@
-import { IConfig, IPlugin } from 'umi-types';
-
-import defaultSettings from './defaultSettings';
 // https://umijs.org/config/
 import slash from 'slash2';
+import { IConfig, IPlugin } from 'umi-types';
+import defaultSettings from './defaultSettings';
 import webpackPlugin from './plugin.config';
 import routes from './route.config';
 

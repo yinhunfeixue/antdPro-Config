@@ -3,6 +3,13 @@
 1. 项目中的设备及代码片段都基于 VSCODE 配置，请先安装-vscode
 1. 安装 vscode 插件 tslint、eslint、Prettier
 
+## 第一步
+
+1. 修改网站名称——`config/defaultSettings.ts`
+1. 修改 LOGO——替换图片`src/assets/logo.png`
+
+现在你已完成了项目的初始化
+
 ## 需要记住
 
 ### 针对 IDE 的代码片段
