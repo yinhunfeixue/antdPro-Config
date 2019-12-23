@@ -17,6 +17,11 @@ export default [
             path: '/Demo/Components/DetailModelPage',
             component: './Demo/Components/DetailModelPage',
           },
+          {
+            name: 'DemoFormTable',
+            path: '/Demo/Components/DemoFormTable',
+            component: './Demo/Components/DemoFormTable',
+          },
         ],
       },
       {

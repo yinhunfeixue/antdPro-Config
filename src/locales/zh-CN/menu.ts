@@ -57,4 +57,5 @@ export default {
   'menu.Demo.Functions.RenderSelectOption': '渲染下拉列表',
   'menu.Demo.Functions.RenderTree': '渲染树',
   'menu.Demo.Style': '样式示例',
+  'menu.Demo.Components.DemoFormTable': '表单表格示例',
 };
