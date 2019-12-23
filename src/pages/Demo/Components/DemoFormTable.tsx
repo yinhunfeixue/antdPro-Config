@@ -10,6 +10,49 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
     return (
       <div>
         <FormTable<IDemoData>
+          itemList={[
+            {
+              field: 'id',
+              type: String,
+              isKey: true,
+              formProps: {
+                hideInForm: true,
+              },
+            },
+            {
+              field: 'name',
+              label: '姓名',
+              type: String,
+              displayInTable: true,
+              formProps: {
+                required: true,
+                disableEdit: true,
+              },
+            },
+            {
+              field: 'age',
+              label: '年龄',
+              type: Number,
+              displayInTable: true,
+              formProps: {},
+            },
+            {
+              field: 'createTime',
+              label: '创建时间',
+              type: Date,
+              displayInTable: true,
+              formProps: {
+                span: 24,
+                labelSpan: 3,
+              },
+            },
+            {
+              field: 'remark',
+              label: '备注',
+              type: String,
+              formProps: {},
+            },
+          ]}
           getListFunction={async (currentPage: number) => {
             await Axios.get('.');
             return {
@@ -29,46 +72,13 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               total: 34,
             };
           }}
-          showQuickJumper
-          itemList={[
-            {
-              field: 'id',
-              type: String,
-              isKey: true,
-            },
-            {
-              field: 'name',
-              label: '姓名',
-              type: String,
-              displayInTable: true,
-              required: true,
-              disableEdit: true,
-            },
-            {
-              field: 'age',
-              label: '年龄',
-              type: Number,
-              displayInTable: true,
-            },
-            {
-              field: 'createTime',
-              label: '创建时间',
-              type: Date,
-              displayInTable: true,
-            },
-            {
-              field: 'remark',
-              label: '备注',
-              type: String,
-            },
-          ]}
           deleteFunction={() => {
             return Axios.delete('.');
           }}
           getFunction={() => {
             return Axios.get('.');
           }}
-          editFunction={() => {
+          updateFunction={() => {
             return Axios.put('.');
           }}
         />

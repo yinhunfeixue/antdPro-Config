@@ -1,9 +1,55 @@
 import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
 import IForm from '@/base/interfaces/IForm';
-import { Spin } from 'antd';
-import Form from 'antd/lib/form';
+import { Form, Spin } from 'antd';
 import React, { Component, ReactElement, ReactNode } from 'react';
 
+interface IDetailViewProps<T> {
+  /**
+   * 源数据。编辑、查看时，需要赋值
+   */
+  initData?: T;
+
+  /**
+   * 获取完整数据的方法
+   *
+   * @param initData 源数据
+   */
+  getFunction?: (initData: T) => Promise<T | undefined>;
+
+  /**
+   * 新增的方法
+   *
+   * @param clientData 初始数据
+   */
+  addFunction?: (clientData: T) => Promise<any>;
+
+  /**
+   * 更新数据的方法
+   * @param initData 源数据
+   * @param newData 新数据
+   */
+  updateFunction?: (initData: T, newData: T) => Promise<any>;
+
+  /**
+   * 窗口类型
+   */
+  type?: DetailViewTypeEnum;
+
+  /**
+   * 渲染表格项
+   * @param instance DetailView实例，其中instance.props.form可获取表单实例
+   * @param initData 通过props传入的初始数据
+   * @param serverData 通过getRequestData获取且通过parseServerData解析后返回的数据
+   */
+  renderForm?: (instance: DetailView<T>, initData?: T, serverData?: T) => ReactNode;
+
+  renderControls?: (instance: DetailView<T>) => ReactNode;
+}
+
+interface IDetailViewState<T> {
+  serverData: T | undefined;
+  loading: boolean;
+}
 class DetailView<T> extends Component<IDetailViewProps<T> & IForm, IDetailViewState<T>> {
   public constructor(props: IDetailViewProps<T> & IForm) {
     super(props);
@@ -73,53 +119,6 @@ class DetailView<T> extends Component<IDetailViewProps<T> & IForm, IDetailViewSt
       </Spin>
     );
   }
-}
-interface IDetailViewProps<T> {
-  /**
-   * 源数据，编辑、查看时，需要赋值
-   */
-  initData?: T;
-
-  /**
-   * 获取完整数据的方法
-   *
-   * @param initData 源数据
-   */
-  getFunction?: (initData: T) => Promise<T | null>;
-
-  /**
-   * 新增的方法
-   *
-   * @param clientData 初始数据
-   */
-  addFunction?: (clientData: T) => Promise<any>;
-
-  /**
-   * 更新数据的方法
-   * @param initData 源数据
-   * @param newData 新数据
-   */
-  updateFunction?: (initData: T, newData: T) => Promise<any>;
-
-  /**
-   * 窗口类型
-   */
-  type: DetailViewTypeEnum;
-
-  /**
-   * 渲染表格项
-   * @param instance DetailView实例，其中instance.props.form可获取表单实例
-   * @param initData 通过props传入的初始数据
-   * @param serverData 通过getRequestData获取且通过parseServerData解析后返回的数据
-   */
-  renderForm?: (instance: DetailView<T>, initData?: T, serverData?: T) => ReactNode;
-
-  renderControls?: (instance: DetailView<T>) => ReactNode;
-}
-
-interface IDetailViewState<T> {
-  serverData?: T;
-  loading: boolean;
 }
 
 export { DetailView as DetailViewClass };

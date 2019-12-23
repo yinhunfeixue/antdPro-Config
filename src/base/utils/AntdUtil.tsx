@@ -91,9 +91,7 @@ class AntdUtil {
     }
     // 设置formlabelspan
     return dataSource.map((item, index) => {
-      const formLabelSpan = item.hasOwnProperty('formLabelSpan')
-        ? item.formLabelSpan
-        : defaultFormLabelSpan;
+      const formLabelSpan = item.formLabelSpan ? item.formLabelSpan : defaultFormLabelSpan;
 
       const formItemSpanArg: any = {};
       if (formLabelSpan) {
@@ -112,7 +110,7 @@ class AntdUtil {
       );
 
       // 判断是否加上列
-      const span = item.hasOwnProperty('span') ? item.span : defaultSpan;
+      const span = item.span ? item.span : defaultSpan;
       if (span) {
         return (
           <Col key={index} span={span}>

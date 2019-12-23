@@ -140,19 +140,6 @@ class DemoDetail extends DetailModal<any> {
       6,
     );
   };
-
-  /**
-   * 此函数在父类全局设置一次就行，不用重写
-   */
-  protected parseServerData = (response: any): any => {
-    if (response) {
-      return {
-        x: 'server-x',
-        y: 'server-y',
-      };
-    }
-    return null;
-  };
 }
 
 const DemoDetailForm = (Form.create()(DemoDetail) as any) as <T>(

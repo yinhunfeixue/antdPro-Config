@@ -1,4 +1,6 @@
+import FormTableEditModal from '@/base/components/FormTable/FormTableEditModal';
 import IFormTableItem from '@/base/components/FormTable/IFormTableItem';
+import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
 import IComponentProps from '@/base/interfaces/IComponentProps';
 import { Button, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
@@ -24,6 +26,20 @@ interface IFormTableState<T> {
 
   requestListLoading: boolean;
   deleteLoading: boolean;
+
+  /**** 弹窗相关 *****/
+  modalVisible: boolean;
+  modalType?: DetailViewTypeEnum;
+  selectedRecord?: T;
+
+  /**
+   * 表单一行有几列
+   */
+  columnCount?: number;
+
+  labelSpan?: number;
+
+  modalWidth?: number;
 }
 interface IFormTableProps<T> extends IComponentProps {
   /**
@@ -54,7 +70,7 @@ interface IFormTableProps<T> extends IComponentProps {
   /**
    * 修改数据的方法
    */
-  editFunction?: (record: T) => Promise<void>;
+  updateFunction?: (record: T) => Promise<void>;
 
   /**
    * 删除一项数据的方法
@@ -69,7 +85,7 @@ interface IFormTableProps<T> extends IComponentProps {
   /**
    * 渲染编辑列，如果不设置，则根据其它属性自动生成，规则为
    * + 如果设置了getFunction，生成查看按钮
-   * + 如果设置了getFunction 和 editFunction，生成编辑按钮
+   * + 如果设置了getFunction 和 updateFunction，生成编辑按钮
    * + 如果设置了deleteFunction，生成删除按钮
    *
    * @param item 数据项
@@ -98,6 +114,8 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
       tableCurrentPage: 1,
       requestListLoading: false,
       deleteLoading: false,
+      modalVisible: false,
+      selectedRecord: undefined,
     };
   }
 
@@ -164,17 +182,43 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
   }
 
   private defaultEditColumnsRender(record: T): ReactNode {
-    const { getFunction, editFunction, deleteFunction } = this.props;
+    const { getFunction, updateFunction, deleteFunction } = this.props;
     const { deleteLoading } = this.state;
     /**
      * + 如果设置了getFunction，生成查看按钮
-     * + 如果设置了getFunction 和 editFunction，生成编辑按钮
+     * + 如果设置了getFunction 和 updateFunction，生成编辑按钮
      * + 如果设置了deleteFunction，生成删除按钮
      */
     return (
       <React.Fragment>
-        {getFunction && <Button type="link">查看</Button>}
-        {getFunction && editFunction && <Button type="link">编辑</Button>}
+        {getFunction && (
+          <Button
+            type="link"
+            onClick={() => {
+              this.setState({
+                modalVisible: true,
+                selectedRecord: record,
+                modalType: DetailViewTypeEnum.READ,
+              });
+            }}
+          >
+            查看
+          </Button>
+        )}
+        {getFunction && updateFunction && (
+          <Button
+            type="link"
+            onClick={() => {
+              this.setState({
+                modalVisible: true,
+                selectedRecord: record,
+                modalType: DetailViewTypeEnum.UPDATE,
+              });
+            }}
+          >
+            编辑
+          </Button>
+        )}
         {deleteFunction && (
           <Button
             type="danger"
@@ -221,7 +265,15 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
       tableTotal,
       tableCurrentPage,
       requestListLoading,
+      modalVisible,
+      selectedRecord,
+      modalType,
+      modalWidth,
+      columnCount,
+      labelSpan,
     } = this.state;
+
+    const { itemList } = this.props;
 
     const { showQuickJumper, showTotal } = this.props;
     return (
@@ -245,8 +297,16 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
           }}
         />
         {/* 渲染编辑窗口 */}
-        {/* 渲染新增窗口 */}
-        {/* 渲染查看窗口 */}
+        <FormTableEditModal
+          itemList={itemList}
+          onCancel={() => this.setState({ modalVisible: false, modalType: undefined })}
+          type={modalType}
+          visible={modalVisible}
+          data={selectedRecord}
+          width={modalWidth}
+          columnCount={columnCount}
+          labelSpan={labelSpan}
+        />
       </div>
     );
   }

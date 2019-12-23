@@ -39,9 +39,9 @@ class DetailModal<T> extends Component<IDetailModalProps<T>, IDetailModalState> 
 
   protected async getReuqestData(initData: T) {
     if (!initData) {
-      return null;
+      return undefined;
     }
-    return null;
+    return undefined;
   }
 
   protected async addRequestData(clientData: T) {
