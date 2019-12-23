@@ -1,14 +1,14 @@
 import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
 import IForm from '@/base/interfaces/IForm';
-import { Form, Spin } from 'antd';
-import Axios from 'axios';
-import React, { Component, ReactNode } from 'react';
+import { Spin } from 'antd';
+import Form from 'antd/lib/form';
+import React, { Component, ReactElement, ReactNode } from 'react';
 
-class DetailView extends Component<IDetailViewProps & IForm, IDetailViewState> {
-  public constructor(props: IDetailViewProps & IForm) {
+class DetailView<T> extends Component<IDetailViewProps<T> & IForm, IDetailViewState<T>> {
+  public constructor(props: IDetailViewProps<T> & IForm) {
     super(props);
     this.state = {
-      serverData: null,
+      serverData: undefined,
       loading: false,
     };
   }
@@ -23,102 +23,83 @@ class DetailView extends Component<IDetailViewProps & IForm, IDetailViewState> {
     }
   }
 
-  private aaa(a: string = '11') {
-    console.log(a);
-  }
-
-  private getData() {
-    const { getRequestData, parseServerData } = this.props;
-    if (getRequestData && parseServerData) {
+  private async getData() {
+    const { getFunction, initData } = this.props;
+    if (getFunction && initData) {
       this.setState({ loading: true });
-      const data = getRequestData(this.props.initData);
-      Axios.request(data).then(res => {
-        this.setState({ serverData: parseServerData(res), loading: false });
-      });
+      const data = await getFunction(initData);
+      this.setState({ serverData: data, loading: false });
     }
   }
 
   /**
    * 保存数据
    */
-  public saveData(successHandler: (res: any) => void, errorHandler?: (error: any) => void) {
-    const { initData, updateRequestData, addRequestData } = this.props;
+  public async saveData(successHandler: (res: any) => void, errorHandler?: (error: any) => void) {
+    const { initData, updateFunction, addFunction } = this.props;
     const { validateFields } = this.props.form;
 
-    validateFields((errors, values) => {
+    validateFields(async (errors, values) => {
       if (!errors) {
-        // 如果有初始数据，表示编辑；没有表示新增
-        let requestData: any = null;
-        if (initData) {
-          if (updateRequestData) {
-            requestData = updateRequestData(this.props.initData, values);
+        try {
+          this.setState({ loading: true });
+          // 如果有初始数据，表示编辑；没有表示新增
+          let res = null;
+          if (initData) {
+            if (updateFunction) {
+              res = await updateFunction(initData, values);
+            }
+          } else if (addFunction) {
+            res = await addFunction(values);
           }
-        } else if (addRequestData) {
-          requestData = addRequestData(this.props.initData, values);
+          successHandler(res);
+        } catch (error) {
+          if (errorHandler) {
+            errorHandler(error);
+          }
+        } finally {
+          this.setState({ loading: false });
         }
-
-        this.setState({ loading: true });
-        Axios.request(requestData)
-          .then(() => {
-            this.setState({ loading: false });
-          })
-          .then(res => {
-            if (successHandler) {
-              successHandler(res);
-            }
-          })
-          .catch(error => {
-            if (errorHandler) {
-              errorHandler(error);
-            }
-          });
       }
     });
   }
 
   public render(): ReactNode {
+    const { initData } = this.props;
     return (
       <Spin spinning={this.state.loading}>
-        {this.props.renderForm &&
-          this.props.renderForm(this, this.props.initData, this.state.serverData)}
+        {this.props.renderForm && this.props.renderForm(this, initData, this.state.serverData)}
         {this.props.renderControls && this.props.renderControls(this)}
       </Spin>
     );
   }
 }
-interface IDetailViewProps {
+interface IDetailViewProps<T> {
   /**
    * 源数据，编辑、查看时，需要赋值
    */
-  initData?: any;
+  initData?: T;
 
   /**
    * 获取完整数据的方法
    *
    * @param initData 源数据
    */
-  getRequestData?: (initData: any) => any;
-
-  /**
-   * 解析从服务器获取的数据
-   *
-   * @param response 服务器响应的数据
-   */
-  parseServerData?: (response: any) => any;
+  getFunction?: (initData: T) => Promise<T | null>;
 
   /**
    * 新增的方法
    *
-   * @param data 新增的数据
+   * @param clientData 初始数据
    */
-  addRequestData?: (initData: any, clientData: any) => any;
+  addFunction?: (clientData: T) => Promise<any>;
 
   /**
    * 更新数据的方法
    * @param initData 源数据
    * @param newData 新数据
    */
-  updateRequestData?: (initData: any, newData: any) => any;
+  updateFunction?: (initData: T, newData: T) => Promise<any>;
 
   /**
    * 窗口类型
@@ -131,16 +112,18 @@ interface IDetailViewProps {
    * @param initData 通过props传入的初始数据
    * @param serverData 通过getRequestData获取且通过parseServerData解析后返回的数据
    */
-  renderForm?: (instance: DetailView, initData: any, serverData: any) => ReactNode;
+  renderForm?: (instance: DetailView<T>, initData?: T, serverData?: T) => ReactNode;
 
-  renderControls?: (instance: DetailView) => ReactNode;
+  renderControls?: (instance: DetailView<T>) => ReactNode;
 }
 
-interface IDetailViewState {
-  serverData: any;
+interface IDetailViewState<T> {
+  serverData?: T;
   loading: boolean;
 }
 
-export default (Form.create()(DetailView) as any) as (props: IDetailViewProps) => any;
-
 export { DetailView as DetailViewClass };
+
+export default (Form.create()(DetailView) as any) as <T>(
+  props: IDetailViewProps<T>,
+) => ReactElement;

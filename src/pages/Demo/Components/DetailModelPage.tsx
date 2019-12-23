@@ -72,7 +72,7 @@ class DetailModelPage extends Component<IPageProps, IDetailModelPageSate> {
               if (this.editView) {
                 this.setState(
                   {
-                    initData: { id: 1, x: 'initX' },
+                    initData: { id: 1, x: 'initX', y: 'yyy' },
                     editType: DetailViewTypeEnum.READ,
                   },
                   () => this.showEditView(),
@@ -96,7 +96,7 @@ class DetailModelPage extends Component<IPageProps, IDetailModelPageSate> {
   }
 }
 
-class DemoDetail extends DetailModal {
+class DemoDetail extends DetailModal<any> {
   protected get modalProps() {
     const initData = this.props.initData;
     return {
@@ -104,33 +104,12 @@ class DemoDetail extends DetailModal {
     };
   }
 
-  protected getReuqestData(initData: any) {
-    return `/getReuqestData?id=${initData.id}`;
-  }
-
-  protected addRequestData(initData: any, clientData: any) {
-    return {
-      method: 'POST',
-      url: '/add',
-      data: {
-        ...clientData,
-      },
-    };
-  }
-
-  protected updateRequestData(initData: any, clientData: any) {
-    return {
-      method: 'PUT',
-      url: '/put',
-      data: {
-        id: initData.id,
-        ...clientData,
-      },
-    };
+  protected async getReuqestData(initData: any) {
+    return initData;
   }
 
   protected renderItems = (
-    instance: DetailViewClass,
+    instance: DetailViewClass<any>,
     initData: any,
     serverData: any,
   ): ReactNode => {
@@ -176,6 +155,8 @@ class DemoDetail extends DetailModal {
   };
 }
 
-const DemoDetailForm = (Form.create()(DemoDetail) as any) as (props: IDetailModalProps) => any;
+const DemoDetailForm = (Form.create()(DemoDetail) as any) as <T>(
+  props: IDetailModalProps<T>,
+) => any;
 
 export default DetailModelPage;
