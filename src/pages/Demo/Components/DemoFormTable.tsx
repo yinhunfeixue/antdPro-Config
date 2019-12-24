@@ -1,3 +1,4 @@
+import ArrayWrap from '@/base/components/FormTable/components/ArrayWrap';
 import FormTable from '@/base/components/FormTable/FormTable';
 import FormTableControlEnum from '@/base/components/FormTable/FormTableControlEnum';
 import FormTableTypeEnum from '@/base/components/FormTable/FormTableTypeEnum';
@@ -50,9 +51,8 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
                 return record.sex === 1 ? '男' : '女';
               },
               formProps: {
-                controlType: FormTableControlEnum.Radio,
-                controlProps: {
-                  data: [
+                componentWrap: new ArrayWrap(
+                  [
                     {
                       value: 1,
                       label: '男',
@@ -62,16 +62,14 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
                       label: '女',
                     },
                   ],
-                },
+                  FormTableControlEnum.Radio,
+                ),
               },
             },
             {
               field: 'photo',
               label: '头像',
               type: FormTableTypeEnum.File,
-              formProps: {
-                controlType: FormTableControlEnum.FileImage,
-              },
             },
             {
               field: 'createTime',
@@ -88,10 +86,10 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               label: '技能',
               type: FormTableTypeEnum.Array,
               formProps: {
-                controlType: FormTableControlEnum.Checkbox,
-                controlProps: {
-                  data: ['杀人', '放火', '装逼'],
-                },
+                componentWrap: new ArrayWrap(
+                  ['杀人', '放火', '装逼'],
+                  FormTableControlEnum.Checkbox,
+                ),
               },
             },
             {
@@ -99,9 +97,7 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               label: '职业',
               type: FormTableTypeEnum.Array,
               formProps: {
-                controlProps: {
-                  data: ['杀人', '放火', '装逼'],
-                },
+                componentWrap: new ArrayWrap(['杀人', '放火', '装逼']),
               },
             },
             {

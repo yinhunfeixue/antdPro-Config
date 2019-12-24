@@ -1,5 +1,4 @@
-import { IArrayComponentProps } from '@/base/components/FormTable/components/ArrayComponent';
-import FormTableControlEnum from '@/base/components/FormTable/FormTableControlEnum';
+import ComponentWrap from '@/base/components/FormTable/components/ComponentWrap';
 import FormTableTypeEnum from './FormTableTypeEnum';
 export default interface IFormTableItem<T> {
   /**
@@ -53,18 +52,8 @@ export default interface IFormTableItem<T> {
     labelSpan?: number;
 
     /**
-     * 指定的控件类型，如果未指定，则根据type自动创建，规则为
-     * + String--Input
-     * + Number--InputNumber
-     * + Date--DatePicker
-     * + File--File
-     * + Array--Select
-     * + DataArray--RangePicker
-     * + Boolean--Switch
-     * + Tree--Tree
+     * 控件包装器，必须是ComponentWrap的子类
      */
-    controlType?: FormTableControlEnum | string;
-
-    controlProps?: IArrayComponentProps;
+    componentWrap?: ComponentWrap;
   };
 }
