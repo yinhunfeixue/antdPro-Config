@@ -10,45 +10,6 @@
 @AreaBorder: 1px solid #ddd;
 @AreaPadding: 10px;
 
-/**************** 按钮 **************/
-// 按钮普通状态
-@BtnBackground: linear-gradient(
-  180deg,
-  rgba(0, 0, 0, 0.2) 0,
-  rgba(0, 0, 0, 0.7) 50%,
-  rgba(0, 0, 0, 0.9) 50%,
-  rgba(0, 0, 0, 0.3) 100%
-);
-@BtnColor: white;
-// 按钮移上
-@BtnHoverBackground: linear-gradient(
-  180deg,
-  rgba(0, 0, 0, 0.1) 0,
-  rgba(0, 0, 0, 0.6) 50%,
-  rgba(0, 0, 0, 0.8) 50%,
-  rgba(0, 0, 0, 0.2) 100%
-);
-@BtnHoverColor: white;
-
-// 按钮按下
-@BtnDownBackground: linear-gradient(
-  180deg,
-  rgba(0, 0, 0, 0.3) 0,
-  rgba(0, 0, 0, 0.8) 50%,
-  rgba(0, 0, 0, 0.8) 50%,
-  rgba(0, 0, 0, 0.4) 100%
-);
-@BtnDownColor: white;
-
-// 按钮禁用
-@BtnDisableBackground: rgb(153, 153, 153);
-@BtnDisableColor: white;
-
-/************* 输入框 ***************/
-@InputBorderColor: #333333;
-@InputBackgroundColor: white;
-@InputBorder: 1px solid @InputBorderColor;
-
 html,
 body {
   .BaseStyle(@PageBackground, none, @PageColor, @PageFontSize);
@@ -76,45 +37,8 @@ body {
     }
   }
 
-  .ant-btn {
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.9);
-    transition: all 0.3s;
-
-    &:hover {
-      .BaseStyle(@BtnHoverBackground, none, @BtnHoverColor);
-    }
-
-    &,
-    &:focus {
-      .BaseStyle(@BtnBackground, none, @BtnColor);
-    }
-
-    &:active {
-      .BaseStyle(@BtnDownBackground, none, @BtnDownColor);
-    }
-
-    &[disabled],
-    &[disabled]:hover {
-      opacity: 0.5;
-      .BaseStyle(@BtnDisableBackground, none, @BtnDisableColor);
-    }
-
-    &::after {
-      content: none;
-    }
-  }
-
   .ant-input {
     width: unset;
     transition: all 0.3s;
-    &,
-    &:hover {
-      .BaseStyle(@InputBackgroundColor, @InputBorder, none);
-    }
-
-    &:focus {
-      .BaseStyle(@InputBackgroundColor, @InputBorder, none);
-      box-shadow: 0 0 4px @InputBorderColor;
-    }
   }
 }

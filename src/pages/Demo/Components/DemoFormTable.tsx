@@ -1,4 +1,6 @@
 import FormTable from '@/base/components/FormTable/FormTable';
+import FormTableControlEnum from '@/base/components/FormTable/FormTableControlEnum';
+import FormTableTypeEnum from '@/base/components/FormTable/FormTableTypeEnum';
 import IPageProps from '@/base/interfaces/IPageProps';
 import Axios from 'axios';
 import React, { Component, ReactNode } from 'react';
@@ -13,7 +15,6 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
           itemList={[
             {
               field: 'id',
-              type: String,
               isKey: true,
               formProps: {
                 hideInForm: true,
@@ -22,7 +23,6 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
             {
               field: 'name',
               label: '姓名',
-              type: String,
               displayInTable: true,
               formProps: {
                 required: true,
@@ -30,16 +30,53 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               },
             },
             {
+              field: 'enable',
+              label: '启用',
+              type: FormTableTypeEnum.Boolean,
+              displayInTable: true,
+            },
+            {
               field: 'age',
               label: '年龄',
-              type: Number,
+              type: FormTableTypeEnum.Number,
               displayInTable: true,
-              formProps: {},
+            },
+            {
+              field: 'sex',
+              label: '性别',
+              type: FormTableTypeEnum.Array,
+              displayInTable: true,
+              render: (text: any, record: IDemoData, index: number) => {
+                return record.sex === 1 ? '男' : '女';
+              },
+              formProps: {
+                controlType: FormTableControlEnum.Radio,
+                controlProps: {
+                  options: [
+                    {
+                      value: 1,
+                      label: '男',
+                    },
+                    {
+                      value: 2,
+                      label: '女',
+                    },
+                  ],
+                },
+              },
+            },
+            {
+              field: 'photo',
+              label: '头像',
+              type: FormTableTypeEnum.File,
+              formProps: {
+                controlType: FormTableControlEnum.FileImage,
+              },
             },
             {
               field: 'createTime',
               label: '创建时间',
-              type: Date,
+              type: FormTableTypeEnum.Date,
               displayInTable: true,
               formProps: {
                 span: 24,
@@ -47,10 +84,19 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               },
             },
             {
+              field: 'diedTime',
+              label: '预计死亡时间',
+              type: FormTableTypeEnum.DateArray,
+              displayInTable: true,
+            },
+            {
               field: 'remark',
               label: '备注',
-              type: String,
-              formProps: {},
+            },
+            {
+              field: 'att',
+              label: '附件',
+              type: FormTableTypeEnum.File,
             },
           ]}
           getListFunction={async (currentPage: number) => {
@@ -61,12 +107,26 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
                   id: 1,
                   name: `a${currentPage}`,
                   age: currentPage * 1,
-                  createTime: '2019-1-1',
+                  createTime: new Date().toUTCString(),
+                  enable: true,
+                  diedTime: [new Date().toUTCString(), new Date().toUTCString()],
+                  sex: 2,
+                  att: [
+                    {
+                      uid: '1',
+                      name: 'xxx.png',
+                      status: 'done',
+                      response: 'Server Error 500', // custom error message to show
+                      url: 'http://www.baidu.com/xxx.png',
+                    },
+                  ],
                 },
                 {
                   id: 2,
                   name: `b${currentPage}`,
                   age: currentPage * 2,
+                  createTime: new Date().toUTCString(),
+                  sex: 2,
                 },
               ],
               total: 34,
@@ -90,7 +150,15 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
 interface IDemoData {
   id: number;
   name: string;
-  age: number;
+  age?: number;
+  createTime: string;
+  enable?: boolean;
+  sex?: number;
+  /**
+   * 预计死亡时间
+   */
+  diedTime?: string[];
+  att?: any[];
 }
 
 export default DemoFormTable;

@@ -45,7 +45,7 @@ interface IFormTableProps<T> extends IComponentProps {
   /**
    * 数据描述列表
    */
-  itemList: IFormTableItem[];
+  itemList: IFormTableItem<T>[];
 
   /**
    * 获取列表的方法
@@ -157,6 +157,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
         .map(item => ({
           title: item.label,
           dataIndex: item.field,
+          render: item.render,
         }));
     }
     // 渲染操作列
@@ -299,7 +300,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
         {/* 渲染编辑窗口 */}
         <FormTableEditModal
           itemList={itemList}
-          onCancel={() => this.setState({ modalVisible: false, modalType: undefined })}
+          onCancel={() => this.setState({ modalVisible: false })}
           type={modalType}
           visible={modalVisible}
           data={selectedRecord}
