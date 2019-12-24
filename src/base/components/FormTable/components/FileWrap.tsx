@@ -19,7 +19,7 @@ class FileWrap extends ComponentWrap {
       default:
         return (
           <Upload disabled={disabled}>
-            <Button>Upload</Button>
+            <Button disabled={disabled}>Upload</Button>
           </Upload>
         );
     }
