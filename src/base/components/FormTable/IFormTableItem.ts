@@ -1,7 +1,5 @@
+import { IArrayComponentProps } from '@/base/components/FormTable/components/ArrayComponent';
 import FormTableControlEnum from '@/base/components/FormTable/FormTableControlEnum';
-import { CheckboxGroupProps } from 'antd/lib/checkbox';
-import { RadioGroupProps } from 'antd/lib/radio';
-import { SelectProps } from 'antd/lib/select';
 import FormTableTypeEnum from './FormTableTypeEnum';
 export default interface IFormTableItem<T> {
   /**
@@ -67,6 +65,6 @@ export default interface IFormTableItem<T> {
      */
     controlType?: FormTableControlEnum | string;
 
-    controlProps?: RadioGroupProps | CheckboxGroupProps | SelectProps;
+    controlProps?: IArrayComponentProps;
   };
 }

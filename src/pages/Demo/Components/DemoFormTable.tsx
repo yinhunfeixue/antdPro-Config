@@ -52,7 +52,7 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               formProps: {
                 controlType: FormTableControlEnum.Radio,
                 controlProps: {
-                  options: [
+                  data: [
                     {
                       value: 1,
                       label: '男',
@@ -81,6 +81,27 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               formProps: {
                 span: 24,
                 labelSpan: 3,
+              },
+            },
+            {
+              field: 'skills',
+              label: '技能',
+              type: FormTableTypeEnum.Array,
+              formProps: {
+                controlType: FormTableControlEnum.Checkbox,
+                controlProps: {
+                  data: ['杀人', '放火', '装逼'],
+                },
+              },
+            },
+            {
+              field: 'work',
+              label: '职业',
+              type: FormTableTypeEnum.Array,
+              formProps: {
+                controlProps: {
+                  data: ['杀人', '放火', '装逼'],
+                },
               },
             },
             {
@@ -120,6 +141,8 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
                       url: 'http://www.baidu.com/xxx.png',
                     },
                   ],
+                  skills: ['杀人', '放火'],
+                  work: '放火',
                 },
                 {
                   id: 2,
@@ -159,6 +182,11 @@ interface IDemoData {
    */
   diedTime?: string[];
   att?: any[];
+  /**
+   * 工作技能
+   */
+  skills?: string[];
+  work?: string;
 }
 
 export default DemoFormTable;

@@ -1,9 +1,10 @@
+import ArrayComponent, {
+  IArrayComponentProps,
+} from '@/base/components/FormTable/components/ArrayComponent';
 import FormTableControlEnum from '@/base/components/FormTable/FormTableControlEnum';
 import IFormTableItem from '@/base/components/FormTable/IFormTableItem';
-import { Button, DatePicker, Icon, Input, InputNumber, Select, Switch, Tree, Upload } from 'antd';
-import CheckboxGroup from 'antd/lib/checkbox/Group';
+import { Button, DatePicker, Icon, Input, InputNumber, Switch, Tree, Upload } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
-import RadioGroup from 'antd/lib/radio/group';
 import moment from 'moment';
 import React, { ReactNode } from 'react';
 enum FormTableTypeEnum {
@@ -28,8 +29,8 @@ namespace FormTableTypeEnum {
   ): ReactNode {
     const { getFieldDecorator } = form;
     const formProps = item.formProps || {};
+    const controlProps: IArrayComponentProps = formProps.controlProps || {};
     const props = {
-      ...formProps.controlProps,
       disabled,
     };
     switch (item.type) {
@@ -67,18 +68,21 @@ namespace FormTableTypeEnum {
         );
 
       case FormTableTypeEnum.Array:
-        switch (formProps.controlType) {
-          case FormTableControlEnum.Checkbox:
-            return getFieldDecorator(item.field, { initialValue: value })(
-              <CheckboxGroup {...props} />,
-            );
-          case FormTableControlEnum.Radio:
-            return getFieldDecorator(item.field, { initialValue: value })(
-              <RadioGroup {...props} />,
-            );
-          default:
-            return getFieldDecorator(item.field, { initialValue: value })(<Select {...props} />);
-        }
+        return getFieldDecorator(item.field, { initialValue: value })(
+          <ArrayComponent {...props} {...controlProps} type={formProps.controlType} />,
+        );
+      // switch (formProps.controlType) {
+      //   case FormTableControlEnum.Checkbox:
+      //     return getFieldDecorator(item.field, { initialValue: value })(
+      //       <CheckboxGroup {...props} />,
+      //     );
+      //   case FormTableControlEnum.Radio:
+      //     return getFieldDecorator(item.field, { initialValue: value })(
+      //       <RadioGroup {...props} />,
+      //     );
+      //   default:
+      //     return getFieldDecorator(item.field, { initialValue: value })(<Select {...props} />);
+      // }
       case FormTableTypeEnum.DateArray:
         return getFieldDecorator(item.field, {
           initialValue: value instanceof Array ? value.map(item => moment(item)) : [],
