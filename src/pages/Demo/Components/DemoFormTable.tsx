@@ -1,4 +1,5 @@
 import ArrayWrap from '@/base/components/FormTable/components/ArrayWrap';
+import StringWrap from '@/base/components/FormTable/components/StringWrap';
 import FormTable from '@/base/components/FormTable/FormTable';
 import FormTableControlEnum from '@/base/components/FormTable/FormTableControlEnum';
 import FormTableTypeEnum from '@/base/components/FormTable/FormTableTypeEnum';
@@ -35,6 +36,9 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               label: '启用',
               type: FormTableTypeEnum.Boolean,
               displayInTable: true,
+              render: (text, record) => {
+                return record.enable ? '是' : <span style={{ color: '#ff0000' }}>否</span>;
+              },
             },
             {
               field: 'age',
@@ -69,13 +73,14 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
             {
               field: 'photo',
               label: '头像',
-              type: FormTableTypeEnum.File,
+              formProps: {
+                componentWrap: new StringWrap(FormTableControlEnum.Image),
+              },
             },
             {
               field: 'createTime',
               label: '创建时间',
               type: FormTableTypeEnum.Date,
-              displayInTable: true,
               formProps: {
                 span: 24,
                 labelSpan: 3,
@@ -86,6 +91,7 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               label: '技能',
               type: FormTableTypeEnum.Array,
               formProps: {
+                disableEdit: true,
                 componentWrap: new ArrayWrap(
                   ['杀人', '放火', '装逼'],
                   FormTableControlEnum.Checkbox,
@@ -104,7 +110,6 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               field: 'diedTime',
               label: '预计死亡时间',
               type: FormTableTypeEnum.DateArray,
-              displayInTable: true,
             },
             {
               field: 'remark',
@@ -127,7 +132,9 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
                   createTime: new Date().toUTCString(),
                   enable: true,
                   diedTime: [new Date().toUTCString(), new Date().toUTCString()],
-                  sex: 2,
+                  sex: 1,
+                  photo:
+                    'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=664782282,1142354879&fm=15&gp=0.jpg',
                   att: [
                     {
                       uid: '1',
@@ -183,6 +190,7 @@ interface IDemoData {
    */
   skills?: string[];
   work?: string;
+  photo?: string;
 }
 
 export default DemoFormTable;

@@ -6,25 +6,23 @@ import RadioGroup from 'antd/lib/radio/group';
 import React from 'react';
 
 class ArrayWrap extends ComponentWrap {
-  public type?: FormTableControlEnum;
   public data: ({ label: string; value: any } | string)[] = [];
 
   constructor(
     data: ({ label: string; value: any } | string)[],
     type?: FormTableControlEnum | undefined,
   ) {
-    super();
-    this.type = type;
+    super(type);
     this.data = data;
   }
 
   render() {
-    const { data, type } = this;
+    const { data, type, disabled } = this;
     switch (type) {
       case FormTableControlEnum.Checkbox:
-        return <CheckboxGroup options={data} />;
+        return <CheckboxGroup options={data} disabled={disabled} />;
       case FormTableControlEnum.Radio:
-        return <RadioGroup options={data} />;
+        return <RadioGroup options={data} disabled={disabled} />;
       default:
         let option = (data || []).map(item => {
           if (typeof item === 'string') {
@@ -37,7 +35,7 @@ class ArrayWrap extends ComponentWrap {
           }
         });
         return (
-          <Select>
+          <Select disabled={disabled}>
             {option &&
               option.map(item => {
                 return (

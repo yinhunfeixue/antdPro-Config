@@ -1,6 +1,9 @@
 import ArrayWrap from '@/base/components/FormTable/components/ArrayWrap';
+import ComponentWrap from '@/base/components/FormTable/components/ComponentWrap';
+import FileWrap from '@/base/components/FormTable/components/FileWrap';
+import StringWrap from '@/base/components/FormTable/components/StringWrap';
 import IFormTableItem from '@/base/components/FormTable/IFormTableItem';
-import { Button, DatePicker, Input, InputNumber, Switch, Tree, Upload } from 'antd';
+import { DatePicker, InputNumber, Switch, Tree } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import moment from 'moment';
 import React, { ReactNode } from 'react';
@@ -22,13 +25,14 @@ namespace FormTableTypeEnum {
     item: IFormTableItem<T>,
     value: any,
     form: WrappedFormUtils,
-    disabled?: boolean,
+    disabled: boolean = false,
   ): ReactNode {
     const { getFieldDecorator } = form;
     const formProps = item.formProps || {};
     const props = {
       disabled,
     };
+    let wrap: ComponentWrap | undefined;
     switch (item.type) {
       case FormTableTypeEnum.Boolean:
         return getFieldDecorator(item.field, { initialValue: value, valuePropName: 'checked' })(
@@ -40,46 +44,27 @@ namespace FormTableTypeEnum {
         return getFieldDecorator(item.field, { initialValue: moment(value) })(
           <DatePicker {...props} />,
         );
-      case FormTableTypeEnum.File:
-        // if (formProps.controlType === FormTableControlEnum.FileImage) {
-        //   return getFieldDecorator(item.field, {
-        //     initialValue: value || [],
-        //     valuePropName: 'defaultFileList',
-        //   })(
-        //     <Upload {...props} listType="picture-card">
-        //       <div>
-        //         <Icon type="plus" />
-        //         <div className="ant-upload-text">Upload</div>
-        //       </div>
-        //     </Upload>,
-        //   );
-        // }
-        return getFieldDecorator(item.field, {
-          initialValue: value || [],
-          valuePropName: 'defaultFileList',
-        })(
-          <Upload {...props}>
-            <Button>Upload</Button>
-          </Upload>,
-        );
-
-      case FormTableTypeEnum.Array:
-        return getFieldDecorator(item.field, { initialValue: value })(
-          formProps.componentWrap ? formProps.componentWrap.render() : new ArrayWrap([]).render(),
-        );
       case FormTableTypeEnum.DateArray:
         return getFieldDecorator(item.field, {
           initialValue: value instanceof Array ? value.map(item => moment(item)) : [],
         })(<DatePicker.RangePicker {...props} />);
       case FormTableTypeEnum.Tree:
         return getFieldDecorator(item.field, { initialValue: value })(<Tree {...props} />);
+      case FormTableTypeEnum.File:
+        wrap = formProps.componentWrap || new FileWrap();
+        wrap.disabled = disabled;
+        return getFieldDecorator(item.field, {
+          initialValue: value || [],
+          valuePropName: 'defaultFileList',
+        })(wrap.render());
+      case FormTableTypeEnum.Array:
+        wrap = formProps.componentWrap || new ArrayWrap([]);
+        wrap.disabled = disabled;
+        return getFieldDecorator(item.field, { initialValue: value })(wrap.render());
       default:
-        switch (formProps.componentWrap) {
-          // case FormTableControlEnum.Image:
-          //   return <img src={value} />;
-          default:
-            return getFieldDecorator(item.field, { initialValue: value })(<Input {...props} />);
-        }
+        wrap = formProps.componentWrap || new StringWrap();
+        wrap.disabled = disabled;
+        return getFieldDecorator(item.field, { initialValue: value })(wrap.render());
     }
   }
 }
