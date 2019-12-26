@@ -4,7 +4,8 @@ import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
 import IComponentProps from '@/base/interfaces/IComponentProps';
 import { Button, Table } from 'antd';
 import { ColumnProps } from 'antd/lib/table';
-import React, { Component, ReactNode } from 'react';
+import classnames from 'classnames';
+import React, { Component, CSSProperties, ReactNode } from 'react';
 import styles from './FormTable.less';
 
 interface IFormTableState<T> {
@@ -83,24 +84,33 @@ interface IFormTableProps<T> extends IComponentProps {
   deleteListFunction?: (recordList: any[]) => Promise<void>;
 
   /**
-   * 渲染编辑列，如果不设置，则根据其它属性自动生成，规则为
+   * 渲染编辑列，如果不设置，则使用默认规则，规则为
    * + 如果设置了getFunction，生成查看按钮
    * + 如果设置了getFunction 和 updateFunction，生成编辑按钮
    * + 如果设置了deleteFunction，生成删除按钮
    *
-   * @param item 数据项
-   * @param defaultRenderFunction 默认的渲染函数，如果需要按默认规则渲染，但又需要增加其它操作，可先调用defaultRenderFunction，再添加其它操作元素
+   * @param text 数据默认的文本
+   * @param record 数据项
+   * @param index 数据所在行号，从0开始
+   * @param defaultRender 默认的渲染函数，如果需要按默认规则渲染，但又需要增加其它操作，可调用`defaultRender(record)`生成默认操作元素并插入到其它元素中间
    */
-  editColumnsRender?: (
-    text: any,
-    item: T,
+  editColumnRender?: (
+    text: string,
+    record: T,
     index: number,
-    defaultRenderFunction: (item: T) => ReactNode,
+    defaultRender: (record: T) => ReactNode,
   ) => ReactNode;
 
   showQuickJumper?: boolean;
 
   showTotal?: ((total: number, range: [number, number]) => React.ReactNode) | undefined;
+
+  /**
+   * 表格的样式名
+   */
+  tableClassName?: string;
+
+  tableStyle?: CSSProperties;
 }
 
 class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
@@ -147,7 +157,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
   }
 
   private updateTableColumns(): void {
-    const { itemList, editColumnsRender } = this.props;
+    const { itemList, editColumnRender } = this.props;
     let result: ColumnProps<any>[] = [];
 
     // 获取要显示的列
@@ -162,10 +172,10 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
     }
     // 渲染操作列
     let editColumn: any = null;
-    if (editColumnsRender) {
+    if (editColumnRender) {
       editColumn = {
         render: (text: any, record: T, index: number) => {
-          return editColumnsRender(text, record, index, this.defaultEditColumnsRender);
+          return editColumnRender(text, record, index, this.defaultEditColumnsRender);
         },
       };
     } else {
@@ -182,7 +192,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
     this.setState({ tableColumns: result });
   }
 
-  private defaultEditColumnsRender(record: T): ReactNode {
+  private defaultEditColumnsRender = (record: T): ReactNode => {
     const { getFunction, updateFunction, deleteFunction } = this.props;
     const { deleteLoading } = this.state;
     /**
@@ -234,7 +244,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
         )}
       </React.Fragment>
     );
-  }
+  };
 
   private updateTableKey(): void {
     const dataSource = this.props.itemList;
@@ -276,11 +286,13 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
 
     const { itemList } = this.props;
 
-    const { showQuickJumper, showTotal } = this.props;
+    const { showQuickJumper, showTotal, className, style, tableClassName, tableStyle } = this.props;
     return (
-      <div className={styles.FormTable}>
+      <div className={classnames(styles.FormTable, className)} style={style}>
         {/* 渲染列表 */}
         <Table
+          style={tableStyle}
+          className={tableClassName}
           loading={requestListLoading}
           columns={tableColumns}
           rowKey={tableKey}
