@@ -8,6 +8,8 @@ import classnames from 'classnames';
 import React, { Component, CSSProperties, ReactNode } from 'react';
 import styles from './FormTable.less';
 
+const defaultPageSize = 10;
+
 interface IFormTableState<T> {
   /**
    * 表格列
@@ -119,6 +121,11 @@ interface IFormTableProps<T> extends IComponentProps {
    * 表格的样式
    */
   tableStyle?: CSSProperties;
+
+  /**
+   * 表格每页显示的数量
+   */
+  pageSize?: number;
 }
 
 class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
@@ -140,7 +147,37 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
   componentDidMount() {
     this.updateTableColumns();
     this.updateTableKey();
-    this.requestList();
+    this.changePage();
+  }
+
+  /**
+   * 刷新表格数据
+   */
+  public refreshTable() {
+    this.changePage();
+  }
+
+  /**
+   * 重置表格到第1页，并刷新
+   */
+  public resetTable() {
+    this.changePage(1);
+  }
+
+  private changePage(pageIndex?: number) {
+    if (!pageIndex) {
+      pageIndex = this.state.tableCurrentPage;
+    }
+    const { tableTotal } = this.state;
+    const pageSize = this.props.pageSize || defaultPageSize;
+    const totalPage = Math.ceil(tableTotal / pageSize);
+    if (pageIndex < 1) {
+      pageIndex = 1;
+    }
+    if (pageIndex > totalPage) {
+      pageIndex = totalPage;
+    }
+    this.setState({ tableCurrentPage: pageIndex }, () => this.requestList());
   }
 
   async requestList() {
@@ -155,6 +192,8 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
       tableTotal: res.total,
       requestListLoading: false,
     });
+
+    // 如果当前页码大
   }
 
   componentDidUpdate(prevProps: IFormTableProps<T>) {
@@ -244,7 +283,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
             loading={deleteLoading}
             onClick={async () => {
               await this.deleteItem(record);
-              await this.requestList();
+              await this.changePage();
             }}
           >
             删除
@@ -295,6 +334,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
     const { itemList } = this.props;
 
     const { showQuickJumper, showTotal, className, style, tableClassName, tableStyle } = this.props;
+    const pageSize = this.props.pageSize || defaultPageSize;
     return (
       <div className={classnames(styles.FormTable, className)} style={style}>
         {/* 渲染列表 */}
@@ -310,10 +350,9 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
             current: tableCurrentPage,
             showQuickJumper,
             showTotal,
+            pageSize,
             onChange: (current: number) => {
-              this.setState({ tableCurrentPage: current }, () => {
-                this.requestList();
-              });
+              this.changePage(current);
             },
           }}
         />

@@ -144,7 +144,7 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
         getListFunction={async (currentPage: number) => {
           await Axios.get('.');
           const dataSource = [];
-          for (let i = 0; i < 30; i++) {
+          for (let i = 0; i < 34; i++) {
             dataSource.push({
               id: i,
               name: `a${currentPage}`,
