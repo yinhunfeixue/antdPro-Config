@@ -4,7 +4,7 @@ import StringWrap from '@/base/components/FormTable/components/StringWrap';
 import FormTable from '@/base/components/FormTable/FormTable';
 import FormTableControlEnum from '@/base/components/FormTable/FormTableControlEnum';
 import FormTableTypeEnum from '@/base/components/FormTable/FormTableTypeEnum';
-import { UploadType } from '@/base/components/FormTable/LimitUpload';
+import { UploadType } from '@/base/components/LimitUpload';
 import IPageProps from '@/base/interfaces/IPageProps';
 import { Button } from 'antd';
 import Axios from 'axios';
