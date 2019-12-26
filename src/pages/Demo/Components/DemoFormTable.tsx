@@ -1,8 +1,10 @@
 import ArrayWrap from '@/base/components/FormTable/components/ArrayWrap';
+import FileWrap from '@/base/components/FormTable/components/FileWrap';
 import StringWrap from '@/base/components/FormTable/components/StringWrap';
 import FormTable from '@/base/components/FormTable/FormTable';
 import FormTableControlEnum from '@/base/components/FormTable/FormTableControlEnum';
 import FormTableTypeEnum from '@/base/components/FormTable/FormTableTypeEnum';
+import { UploadType } from '@/base/components/FormTable/LimitUpload';
 import IPageProps from '@/base/interfaces/IPageProps';
 import { Button } from 'antd';
 import Axios from 'axios';
@@ -88,6 +90,14 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
             },
           },
           {
+            field: 'photoFile',
+            label: '头像编辑',
+            type: FormTableTypeEnum.File,
+            formProps: {
+              componentWrap: new FileWrap(UploadType.IMAGE, 1),
+            },
+          },
+          {
             field: 'createTime',
             label: '创建时间',
             type: FormTableTypeEnum.Date,
@@ -126,6 +136,9 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
             field: 'att',
             label: '附件',
             type: FormTableTypeEnum.File,
+            formProps: {
+              componentWrap: new FileWrap(UploadType.FILE, 3),
+            },
           },
         ]}
         getListFunction={async (currentPage: number) => {
@@ -142,6 +155,16 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               sex: 1,
               photo:
                 'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=664782282,1142354879&fm=15&gp=0.jpg',
+              photoFile: [
+                {
+                  uid: '1',
+                  name: 'xxx.png',
+                  status: 'done',
+                  response: 'Server Error 500', // custom error message to show
+                  url:
+                    'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=664782282,1142354879&fm=15&gp=0.jpg',
+                },
+              ],
               att: [
                 {
                   uid: '1',
@@ -192,6 +215,7 @@ interface IDemoData {
   skills?: string[];
   work?: string;
   photo?: string;
+  photoFile?: any[];
 }
 
 export default DemoFormTable;

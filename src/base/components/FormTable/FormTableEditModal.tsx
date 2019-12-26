@@ -12,7 +12,7 @@ interface IFormTableEditModalState<T> {
   loading: boolean;
 }
 interface IFormTableEditModalProps<T> {
-  itemList: IFormTableItem[];
+  itemList: IFormTableItem<T>[];
   visible: boolean;
   type?: DetailViewTypeEnum;
   data?: T;

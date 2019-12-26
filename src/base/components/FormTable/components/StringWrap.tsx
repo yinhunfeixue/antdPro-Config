@@ -5,6 +5,9 @@ import { Input } from 'antd';
 import React from 'react';
 
 class StringWrap extends ComponentWrap {
+  constructor(type?: FormTableControlEnum.Image | FormTableControlEnum.Input) {
+    super(type);
+  }
   render() {
     const { type, disabled } = this;
     switch (type) {

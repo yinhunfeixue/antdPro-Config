@@ -10,7 +10,7 @@ class ArrayWrap extends ComponentWrap {
 
   constructor(
     data: ({ label: string; value: any } | string)[],
-    type?: FormTableControlEnum | undefined,
+    type?: FormTableControlEnum.Checkbox | FormTableControlEnum.Radio | FormTableControlEnum.Select,
   ) {
     super(type);
     this.data = data;
