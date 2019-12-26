@@ -14,6 +14,7 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
   public render(): ReactNode {
     return (
       <FormTable<IDemoData>
+        showLook
         editColumnRender={(text, record, index, defaultRender) => {
           return (
             <>

@@ -85,9 +85,9 @@ interface IFormTableProps<T> extends IComponentProps {
 
   /**
    * 渲染编辑列，如果不设置，则使用默认规则，规则为
-   * + 如果设置了getFunction，生成查看按钮
-   * + 如果设置了getFunction 和 updateFunction，生成编辑按钮
-   * + 如果设置了deleteFunction，生成删除按钮
+   * + 如果设置了`getFunction`且`showLook=true`，生成查看按钮
+   * + 如果设置了`getFunction` 和 `updateFunction`，生成编辑按钮
+   * + 如果设置了`deleteFunction`，生成删除按钮
    *
    * @param text 数据默认的文本
    * @param record 数据项
@@ -101,6 +101,11 @@ interface IFormTableProps<T> extends IComponentProps {
     defaultRender: (record: T) => ReactNode,
   ) => ReactNode;
 
+  /**
+   * 是否显示查看
+   */
+  showLook?: boolean;
+
   showQuickJumper?: boolean;
 
   showTotal?: ((total: number, range: [number, number]) => React.ReactNode) | undefined;
@@ -110,6 +115,9 @@ interface IFormTableProps<T> extends IComponentProps {
    */
   tableClassName?: string;
 
+  /**
+   * 表格的样式
+   */
   tableStyle?: CSSProperties;
 }
 
@@ -193,7 +201,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
   }
 
   private defaultEditColumnsRender = (record: T): ReactNode => {
-    const { getFunction, updateFunction, deleteFunction } = this.props;
+    const { getFunction, updateFunction, deleteFunction, showLook } = this.props;
     const { deleteLoading } = this.state;
     /**
      * + 如果设置了getFunction，生成查看按钮
@@ -202,7 +210,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
      */
     return (
       <React.Fragment>
-        {getFunction && (
+        {getFunction && showLook && (
           <Button
             type="link"
             onClick={() => {
