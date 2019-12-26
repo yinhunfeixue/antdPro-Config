@@ -168,14 +168,12 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
     if (!pageIndex) {
       pageIndex = this.state.tableCurrentPage;
     }
-    const { tableTotal } = this.state;
-    const pageSize = this.props.pageSize || defaultPageSize;
-    const totalPage = Math.ceil(tableTotal / pageSize);
+    const maxPageIndex = this.maxPageIndex;
     if (pageIndex < 1) {
       pageIndex = 1;
     }
-    if (pageIndex > totalPage) {
-      pageIndex = totalPage;
+    if (pageIndex > maxPageIndex) {
+      pageIndex = maxPageIndex;
     }
     this.setState({ tableCurrentPage: pageIndex }, () => this.requestList());
   }
@@ -187,13 +185,27 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
     this.setState({ requestListLoading: true });
     const res = await getListFunction(tableCurrentPage);
 
-    this.setState({
-      tableData: res.dataSource,
-      tableTotal: res.total,
-      requestListLoading: false,
-    });
+    this.setState(
+      {
+        tableData: res.dataSource,
+        tableTotal: res.total,
+        requestListLoading: false,
+      },
+      () => {
+        // 如果当前页码大于总页码，重新请求一次；当删除最后一页的最后一行是会出现这种情况
+        if (this.state.tableCurrentPage > this.maxPageIndex) {
+          this.changePage();
+        }
+      },
+    );
+  }
 
-    // 如果当前页码大
+  private get pageSize() {
+    return this.props.pageSize || defaultPageSize;
+  }
+
+  private get maxPageIndex() {
+    return Math.ceil(this.state.tableTotal / this.pageSize);
   }
 
   componentDidUpdate(prevProps: IFormTableProps<T>) {
@@ -334,7 +346,6 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
     const { itemList } = this.props;
 
     const { showQuickJumper, showTotal, className, style, tableClassName, tableStyle } = this.props;
-    const pageSize = this.props.pageSize || defaultPageSize;
     return (
       <div className={classnames(styles.FormTable, className)} style={style}>
         {/* 渲染列表 */}
@@ -350,7 +361,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
             current: tableCurrentPage,
             showQuickJumper,
             showTotal,
-            pageSize,
+            pageSize: this.pageSize,
             onChange: (current: number) => {
               this.changePage(current);
             },

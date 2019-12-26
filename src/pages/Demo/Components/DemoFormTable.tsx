@@ -12,6 +12,42 @@ import React, { Component, ReactNode } from 'react';
 
 interface IDemoFormTableSate {}
 
+let dataSource: IDemoData[] = [];
+for (let i = 0; i < 34; i++) {
+  dataSource.push({
+    id: i,
+    name: `a${i}`,
+    age: i,
+    createTime: new Date().toUTCString(),
+    enable: true,
+    diedTime: [new Date().toUTCString(), new Date().toUTCString()],
+    sex: 1,
+    photo:
+      'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=664782282,1142354879&fm=15&gp=0.jpg',
+    photoFile: [
+      {
+        uid: '1',
+        name: 'xxx.png',
+        status: 'done',
+        response: 'Server Error 500', // custom error message to show
+        url:
+          'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=664782282,1142354879&fm=15&gp=0.jpg',
+      },
+    ],
+    att: [
+      {
+        uid: '1',
+        name: 'xxx.png',
+        status: 'done',
+        response: 'Server Error 500', // custom error message to show
+        url: 'http://www.baidu.com/xxx.png',
+      },
+    ],
+    skills: ['杀人', '放火'],
+    work: '放火',
+  });
+}
+
 class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
   public render(): ReactNode {
     return (
@@ -143,47 +179,13 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
         ]}
         getListFunction={async (currentPage: number) => {
           await Axios.get('.');
-          const dataSource = [];
-          for (let i = 0; i < 34; i++) {
-            dataSource.push({
-              id: i,
-              name: `a${currentPage}`,
-              age: currentPage * i,
-              createTime: new Date().toUTCString(),
-              enable: true,
-              diedTime: [new Date().toUTCString(), new Date().toUTCString()],
-              sex: 1,
-              photo:
-                'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=664782282,1142354879&fm=15&gp=0.jpg',
-              photoFile: [
-                {
-                  uid: '1',
-                  name: 'xxx.png',
-                  status: 'done',
-                  response: 'Server Error 500', // custom error message to show
-                  url:
-                    'https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=664782282,1142354879&fm=15&gp=0.jpg',
-                },
-              ],
-              att: [
-                {
-                  uid: '1',
-                  name: 'xxx.png',
-                  status: 'done',
-                  response: 'Server Error 500', // custom error message to show
-                  url: 'http://www.baidu.com/xxx.png',
-                },
-              ],
-              skills: ['杀人', '放火'],
-              work: '放火',
-            });
-          }
           return {
             dataSource,
-            total: 34,
+            total: dataSource.length,
           };
         }}
-        deleteFunction={() => {
+        deleteFunction={record => {
+          dataSource = dataSource.filter(item => item.id !== record.id);
           return Axios.delete('.');
         }}
         getFunction={() => {
