@@ -3,7 +3,7 @@ import IFormTableItem from '@/base/components/FormTable/IFormTableItem';
 import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
 import IComponentProps from '@/base/interfaces/IComponentProps';
 import { Button, Table } from 'antd';
-import { ColumnProps } from 'antd/lib/table';
+import { ColumnProps, TableProps, TableRowSelection } from 'antd/lib/table';
 import classnames from 'classnames';
 import React, { Component, CSSProperties, ReactNode } from 'react';
 import styles from './FormTable.less';
@@ -33,7 +33,7 @@ interface IFormTableState<T> {
   /**** 弹窗相关 *****/
   modalVisible: boolean;
   modalType?: DetailViewTypeEnum;
-  selectedRecord?: T;
+  editRecord?: T;
 
   /**
    * 表单一行有几列
@@ -43,6 +43,10 @@ interface IFormTableState<T> {
   labelSpan?: number;
 
   modalWidth?: number;
+
+  selectedRowKeys: string[] | number[];
+
+  selectedRows: T[];
 }
 interface IFormTableProps<T> extends IComponentProps {
   /**
@@ -131,6 +135,15 @@ interface IFormTableProps<T> extends IComponentProps {
    * 隐藏页码器
    */
   hidePage?: boolean;
+
+  /**
+   * 选中操作
+   *
+   * @param defaultRowSelection 默认的选中操作，如使用默认操作，可直接返回
+   */
+  rowSelection?: (defaultRowSelection: TableRowSelection<T>) => TableRowSelection<T>;
+
+  tableProps?: TableProps<T>;
 }
 
 class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
@@ -145,7 +158,9 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
       requestListLoading: false,
       deleteLoading: false,
       modalVisible: false,
-      selectedRecord: undefined,
+      editRecord: undefined,
+      selectedRowKeys: [],
+      selectedRows: [],
     };
   }
 
@@ -272,7 +287,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
             onClick={() => {
               this.setState({
                 modalVisible: true,
-                selectedRecord: record,
+                editRecord: record,
                 modalType: DetailViewTypeEnum.READ,
               });
             }}
@@ -286,7 +301,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
             onClick={() => {
               this.setState({
                 modalVisible: true,
-                selectedRecord: record,
+                editRecord: record,
                 modalType: DetailViewTypeEnum.UPDATE,
               });
             }}
@@ -309,6 +324,14 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
       </React.Fragment>
     );
   };
+
+  private get defaultRowSelection(): TableRowSelection<T> {
+    return {
+      onChange: (selectedRowKeys, selectedRows) => {
+        this.setState({ selectedRowKeys, selectedRows });
+      },
+    };
+  }
 
   private updateTableKey(): void {
     const dataSource = this.props.itemList;
@@ -341,7 +364,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
       tableCurrentPage,
       requestListLoading,
       modalVisible,
-      selectedRecord,
+      editRecord,
       modalType,
       modalWidth,
       columnCount,
@@ -358,11 +381,22 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
       tableClassName,
       tableStyle,
       hidePage,
+      tableProps,
+      rowSelection,
     } = this.props;
+
+    const toTableProps: TableProps<T> = {
+      ...tableProps,
+    };
+
+    if (rowSelection) {
+      toTableProps.rowSelection = rowSelection(this.defaultRowSelection);
+    }
     return (
       <div className={classnames(styles.FormTable, className)} style={style}>
         {/* 渲染列表 */}
         <Table
+          {...toTableProps}
           style={tableStyle}
           className={tableClassName}
           loading={requestListLoading}
@@ -390,7 +424,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
           onCancel={() => this.setState({ modalVisible: false })}
           type={modalType}
           visible={modalVisible}
-          data={selectedRecord}
+          data={editRecord}
           width={modalWidth}
           columnCount={columnCount}
           labelSpan={labelSpan}
