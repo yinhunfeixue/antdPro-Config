@@ -33,8 +33,10 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
           ref={target => (this.formTable = target)}
           showLook
           hidePage={false}
-          rowSelection={d => {
-            return d;
+          rowSelection={{
+            onChange: (keys, rows) => {
+              console.log('outchange', keys, rows);
+            },
           }}
           editColumnRender={(text, record, index, defaultRender) => {
             return (

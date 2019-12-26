@@ -137,11 +137,10 @@ interface IFormTableProps<T> extends IComponentProps {
   hidePage?: boolean;
 
   /**
-   * 选中操作
-   *
-   * @param defaultRowSelection 默认的选中操作，如使用默认操作，可直接返回
+   * 选中操作，设置此属性后，会自动显示多选框
+   * 组件内部有默认的选中处理，如果需要使用默认选中处理，但是外部又无需额外操作，可设置 `rowSelection={{}}`
    */
-  rowSelection?: (defaultRowSelection: TableRowSelection<T>) => TableRowSelection<T>;
+  rowSelection?: TableRowSelection<T>;
 
   tableProps?: TableProps<T>;
 }
@@ -325,13 +324,9 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
     );
   };
 
-  private get defaultRowSelection(): TableRowSelection<T> {
-    return {
-      onChange: (selectedRowKeys, selectedRows) => {
-        this.setState({ selectedRowKeys, selectedRows });
-      },
-    };
-  }
+  private onRowChange = (selectedRowKeys: string[] | number[], selectedRows: T[]) => {
+    this.setState({ selectedRowKeys, selectedRows });
+  };
 
   private updateTableKey(): void {
     const dataSource = this.props.itemList;
@@ -390,7 +385,16 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
     };
 
     if (rowSelection) {
-      toTableProps.rowSelection = rowSelection(this.defaultRowSelection);
+      // 如果设置了rowSelection且设置了onChange，则外部onChange和内部onChange都需要执行
+      toTableProps.rowSelection = {
+        ...rowSelection,
+        onChange: (keys, rows) => {
+          this.onRowChange(keys, rows);
+          if (rowSelection.onChange) {
+            rowSelection.onChange(keys, rows);
+          }
+        },
+      };
     }
     return (
       <div className={classnames(styles.FormTable, className)} style={style}>
