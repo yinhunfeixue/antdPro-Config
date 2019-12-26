@@ -126,6 +126,11 @@ interface IFormTableProps<T> extends IComponentProps {
    * 表格每页显示的数量
    */
   pageSize?: number;
+
+  /**
+   * 隐藏页码器
+   */
+  hidePage?: boolean;
 }
 
 class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
@@ -345,7 +350,15 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
 
     const { itemList } = this.props;
 
-    const { showQuickJumper, showTotal, className, style, tableClassName, tableStyle } = this.props;
+    const {
+      showQuickJumper,
+      showTotal,
+      className,
+      style,
+      tableClassName,
+      tableStyle,
+      hidePage,
+    } = this.props;
     return (
       <div className={classnames(styles.FormTable, className)} style={style}>
         {/* 渲染列表 */}
@@ -356,16 +369,20 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
           columns={tableColumns}
           rowKey={tableKey}
           dataSource={tableData}
-          pagination={{
-            total: tableTotal,
-            current: tableCurrentPage,
-            showQuickJumper,
-            showTotal,
-            pageSize: this.pageSize,
-            onChange: (current: number) => {
-              this.changePage(current);
-            },
-          }}
+          pagination={
+            hidePage
+              ? false
+              : {
+                  total: tableTotal,
+                  current: tableCurrentPage,
+                  showQuickJumper,
+                  showTotal,
+                  pageSize: this.pageSize,
+                  onChange: (current: number) => {
+                    this.changePage(current);
+                  },
+                }
+          }
         />
         {/* 渲染编辑窗口 */}
         <FormTableEditModal

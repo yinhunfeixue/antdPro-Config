@@ -1,5 +1,5 @@
 import ComponentWrap from '@/base/components/FormTable/components/ComponentWrap';
-import LimitUpload, { UploadType } from '@/base/components/LimitUpload';
+import LimitUpload, { UploadType } from '@/base/components/FormTable/LimitUpload';
 import React, { ReactNode } from 'react';
 
 class FileWrap extends ComponentWrap {
