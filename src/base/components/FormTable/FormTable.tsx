@@ -3,6 +3,7 @@ import IFormTableItem from '@/base/components/FormTable/IFormTableItem';
 import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
 import IComponentProps from '@/base/interfaces/IComponentProps';
 import { Button, Table } from 'antd';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
 import { ColumnProps, TableProps, TableRowSelection } from 'antd/lib/table';
 import classnames from 'classnames';
 import React, { Component, CSSProperties, ReactNode } from 'react';
@@ -143,6 +144,21 @@ interface IFormTableProps<T> extends IComponentProps {
   rowSelection?: TableRowSelection<T>;
 
   tableProps?: TableProps<T>;
+
+  /**
+   * 自定义数据项转换为控件的方法
+   *
+   * @param item 数据项
+   * @param value 数据项当前的值
+   * @param form antd中form的包装器，一般使用其中的getFieldDecorator方法
+   * @param disabled 是否期望禁用
+   */
+  customControlRender?: (
+    item: IFormTableItem<T>,
+    value: any,
+    form: WrappedFormUtils,
+    disabled: boolean,
+  ) => ReactNode;
 }
 
 class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
@@ -378,6 +394,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
       hidePage,
       tableProps,
       rowSelection,
+      customControlRender,
     } = this.props;
 
     const toTableProps: TableProps<T> = {
@@ -424,6 +441,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
         />
         {/* 渲染编辑窗口 */}
         <FormTableEditModal
+          customControlRender={customControlRender}
           itemList={itemList}
           onCancel={() => this.setState({ modalVisible: false })}
           type={modalType}

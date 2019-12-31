@@ -31,6 +31,7 @@ for (let i = 0; i < 34; i++) {
     ],
     skills: ['杀人', '放火'],
     work: '放火',
+    custom: 'aa',
   });
 }
 
@@ -53,6 +54,7 @@ export interface IDemoData {
   work?: string;
   photo?: string;
   photoFile?: any[];
+  custom?: string;
 }
 
 export default DataSource;

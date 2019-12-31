@@ -4,9 +4,11 @@ import StringWrap from '@/base/components/FormTable/components/StringWrap';
 import FormTable from '@/base/components/FormTable/FormTable';
 import FormTableControlEnum from '@/base/components/FormTable/FormTableControlEnum';
 import FormTableTypeEnum from '@/base/components/FormTable/FormTableTypeEnum';
+import IFormTableItem from '@/base/components/FormTable/IFormTableItem';
 import { UploadType } from '@/base/components/FormTable/LimitUpload';
 import IPageProps from '@/base/interfaces/IPageProps';
 import { Button } from 'antd';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Axios from 'axios';
 import React, { Component, ReactNode } from 'react';
 import DataSource, { IDemoData } from './DemoFormTableData';
@@ -33,11 +35,24 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
           ref={target => (this.formTable = target)}
           showLook
           hidePage={false}
-          rowSelection={{
-            onChange: (keys, rows) => {
-              console.log('outchange', keys, rows);
-            },
+          customControlRender={(
+            item: IFormTableItem<IDemoData>,
+            value: any,
+            form: WrappedFormUtils<any>,
+            disabled: boolean,
+          ) => {
+            if (item.field === 'custom') {
+              return <div style={{ color: 'red' }}>自定义渲染属性{value}</div>;
+            }
+            return null;
           }}
+          rowSelection={
+            {
+              // onChange: (keys, rows) => {
+              //   console.log('outchange', keys, rows);
+              // },
+            }
+          }
           editColumnRender={(text, record, index, defaultRender) => {
             return (
               <>
@@ -163,6 +178,10 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               formProps: {
                 componentWrap: new FileWrap(UploadType.FILE, 3),
               },
+            },
+            {
+              field: 'custom',
+              label: '自定义渲染的属性',
             },
           ]}
           getListFunction={async (currentPage: number) => {

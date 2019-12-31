@@ -5,6 +5,7 @@ import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
 import IFormItemData from '@/base/interfaces/IFormItemData';
 import AntdUtil from '@/base/utils/AntdUtil';
 import { Form, Modal } from 'antd';
+import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Lodash from 'lodash';
 import React, { Component, ReactNode } from 'react';
 
@@ -25,6 +26,21 @@ interface IFormTableEditModalProps<T> {
   labelSpan?: number;
 
   width?: number;
+
+  /**
+   * 自定义数据项转换为控件的方法
+   *
+   * @param item 数据项
+   * @param value 数据项当前的值
+   * @param form antd中form的包装器，一般使用其中的getFieldDecorator方法
+   * @param disabled 是否期望禁用
+   */
+  customControlRender?: (
+    item: IFormTableItem<T>,
+    value: any,
+    form: WrappedFormUtils,
+    disabled: boolean,
+  ) => ReactNode;
 }
 
 class FormTableEditModal<T> extends Component<
@@ -52,6 +68,25 @@ class FormTableEditModal<T> extends Component<
     return data ? '编辑' : '新建';
   }
 
+  private renderControl(
+    item: IFormTableItem<T>,
+    value: any,
+    form: WrappedFormUtils,
+    disabled: boolean,
+  ) {
+    const { customControlRender } = this.props;
+    let result: ReactNode;
+    // 优先使用自定义函数
+    if (customControlRender) {
+      result = customControlRender(item, value, form, disabled);
+    }
+
+    if (!result) {
+      result = FormTableTypeEnum.toControl(item, value, form, disabled);
+    }
+    return result;
+  }
+
   private renderForm = (
     instance: DetailViewClass<T>,
     initData?: T | undefined,
@@ -62,18 +97,14 @@ class FormTableEditModal<T> extends Component<
 
     for (let item of itemList) {
       const formProps = item.formProps || {};
-      const disabled = type === DetailViewTypeEnum.READ || formProps.disableEdit;
+      const disabled = Boolean(type === DetailViewTypeEnum.READ || formProps.disableEdit);
       if (formProps.hideInForm) {
         continue;
       }
 
       const value = Lodash.get(serverData, item.field) || Lodash.get(initData, item.field);
-      let currentNode: ReactNode = FormTableTypeEnum.toControl(
-        item,
-        value,
-        instance.props.form,
-        disabled,
-      );
+
+      let currentNode: ReactNode = this.renderControl(item, value, instance.props.form, disabled);
 
       result.push({
         label: item.label,
