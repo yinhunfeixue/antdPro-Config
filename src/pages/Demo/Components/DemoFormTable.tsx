@@ -33,7 +33,6 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
         </Button>
         <FormTable<IDemoData>
           ref={target => (this.formTable = target)}
-          showLook
           hidePage={false}
           customControlRender={(
             item: IFormTableItem<IDemoData>,

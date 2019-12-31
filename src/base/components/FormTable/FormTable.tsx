@@ -109,12 +109,18 @@ interface IFormTableProps<T> extends IComponentProps {
   ) => ReactNode;
 
   /**
-   * 是否显示查看
+   * 是否显示查看按钮
    */
   showLook?: boolean;
 
+  /**
+   * 是否显示快速跳转页码的输入框
+   */
   showQuickJumper?: boolean;
 
+  /**
+   * 显示总数量的方法
+   */
   showTotal?: ((total: number, range: [number, number]) => React.ReactNode) | undefined;
 
   /**
