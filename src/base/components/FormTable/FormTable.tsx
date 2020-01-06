@@ -165,6 +165,11 @@ interface IFormTableProps<T> extends IComponentProps {
     form: WrappedFormUtils,
     disabled: boolean,
   ) => ReactNode;
+
+  /**
+   * 搜索表单类型
+   */
+  searchFormType?: any;
 }
 
 class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
@@ -401,6 +406,7 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
       tableProps,
       rowSelection,
       customControlRender,
+      searchFormType,
     } = this.props;
 
     const toTableProps: TableProps<T> = {
@@ -421,6 +427,8 @@ class FormTable<T> extends Component<IFormTableProps<T>, IFormTableState<T>> {
     }
     return (
       <div className={classnames(styles.FormTable, className)} style={style}>
+        {/* 渲染搜索列表 */}
+        {searchFormType && React.createElement(searchFormType, {})}
         {/* 渲染列表 */}
         <Table
           {...toTableProps}

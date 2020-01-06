@@ -7,7 +7,7 @@ import FormTableTypeEnum from '@/base/components/FormTable/FormTableTypeEnum';
 import IFormTableItem from '@/base/components/FormTable/IFormTableItem';
 import { UploadType } from '@/base/components/FormTable/LimitUpload';
 import IPageProps from '@/base/interfaces/IPageProps';
-import { Button } from 'antd';
+import { Button, Input } from 'antd';
 import { WrappedFormUtils } from 'antd/lib/form/Form';
 import Axios from 'axios';
 import React, { Component, ReactNode } from 'react';
@@ -34,6 +34,7 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
         <FormTable<IDemoData>
           ref={target => (this.formTable = target)}
           hidePage={false}
+          searchFormType={SearchForm}
           customControlRender={(
             item: IFormTableItem<IDemoData>,
             value: any,
@@ -203,6 +204,12 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
         />
       </div>
     );
+  }
+}
+
+class SearchForm extends React.Component {
+  render() {
+    return <Input />;
   }
 }
 
