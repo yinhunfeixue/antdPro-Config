@@ -50,6 +50,22 @@ export default [
         path: 'Style',
         component: './Demo/StyleDemo',
       },
+      {
+        name: 'BestPractice',
+        path: 'BestPractice',
+        routes: [
+          {
+            name: 'StateWillChangeByProps',
+            path: 'Demo/BestPractice/StateWillChangeByProps',
+            component: './Demo/BestPractice/StateWillChangeByProps',
+          },
+          {
+            name: 'ResetForReuse',
+            path: 'Demo/BestPractice/ResetForReuse',
+            component: './Demo/BestPractice/ResetForReuse',
+          },
+        ],
+      },
     ],
   },
 ];

@@ -58,4 +58,8 @@ export default {
   'menu.Demo.Functions.RenderTree': '渲染树',
   'menu.Demo.Style': '样式示例',
   'menu.Demo.Components.DemoFormTable': '表单表格示例',
+
+  'menu.Demo.BestPractice': '最佳实践',
+  'menu.Demo.BestPractice.StateWillChangeByProps': '值受state，也受props影响',
+  'menu.Demo.BestPractice.ResetForReuse': '重置数据以复用',
 };
