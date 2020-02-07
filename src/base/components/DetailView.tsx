@@ -1,6 +1,7 @@
 import DetailViewTypeEnum from '@/base/Enums/DetailViewTypeEnum';
 import IForm from '@/base/interfaces/IForm';
 import { Form, Spin } from 'antd';
+import Lodash from 'lodash';
 import React, { Component, ReactElement, ReactNode } from 'react';
 
 interface IDetailViewProps<T> {
@@ -53,19 +54,35 @@ interface IDetailViewState<T> {
 class DetailView<T> extends Component<IDetailViewProps<T> & IForm, IDetailViewState<T>> {
   public constructor(props: IDetailViewProps<T> & IForm) {
     super(props);
-    this.state = {
-      serverData: undefined,
-      loading: false,
-    };
+    this.state = this.getInitData();
   }
 
-  public componentDidMount(): void {
+  private reset() {
+    this.setState(this.getInitData());
+    this.props.form.resetFields();
     // 如果是编辑模式，则先获取数据
     if (
       this.props.type === DetailViewTypeEnum.READ ||
       this.props.type === DetailViewTypeEnum.UPDATE
     ) {
       this.getData();
+    }
+  }
+
+  private getInitData() {
+    return {
+      serverData: undefined,
+      loading: false,
+    };
+  }
+
+  public componentDidMount(): void {
+    this.reset();
+  }
+
+  componentDidUpdate(prevProps: IDetailViewProps<T>) {
+    if (!Lodash.isEqual(this.props.initData, prevProps.initData)) {
+      this.reset();
     }
   }
 
