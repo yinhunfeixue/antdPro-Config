@@ -57,7 +57,7 @@ export default {
   'menu.Demo.Functions.RenderSelectOption': '渲染下拉列表',
   'menu.Demo.Functions.RenderTree': '渲染树',
   'menu.Demo.Style': '样式示例',
-  'menu.Demo.Components.DemoFormTable': '表单表格示例',
+  'menu.Demo.Components.DemoFormTable': '配置式自动化增删改查',
 
   'menu.Demo.BestPractice': '最佳实践',
   'menu.Demo.BestPractice.StateWillChangeByProps': '值受state，也受props影响',

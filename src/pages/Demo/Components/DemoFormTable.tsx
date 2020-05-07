@@ -191,6 +191,7 @@ class DemoFormTable extends Component<IPageProps, IDemoFormTableSate> {
               total: dataSource.length,
             };
           }}
+          addFunction={async record => {}}
           deleteFunction={record => {
             dataSource = dataSource.filter(item => item.id !== record.id);
             return Axios.delete('.');

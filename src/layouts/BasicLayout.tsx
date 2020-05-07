@@ -121,7 +121,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props: BasicLayoutProps) => {
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}
       {...settings}
-      title=""
+      title="aa"
     >
       {children}
     </ProLayout>
